@@ -24,12 +24,19 @@ pprint(getting_photos())
 
 def photos_list():
     photos = []
-    for key, values in getting_photos():
-        for item in values:
-            for likes in item['items']:
+    for values in getting_photos().values():
+        for likes in values['items']:
+            # photos.append({
+            #     'file_name': likes['likes']['count'],
+            #     # 'size': likes['sizes']['type']['-1']
+            # })
+            if likes['likes']['count'] not in photos:
                 photos.append({
-                    'file_name': likes['likes']['count'],
-                    'size': likes['sizes']['type']
+                    'file_name': likes['likes']['count']
+                })
+            else:
+                photos.append({
+                    'file_name': likes['date']
                 })
     return photos
 
