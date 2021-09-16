@@ -30,21 +30,16 @@ pprint(getting_photos())
 def photos_list():
     photos_json = getting_photos()['response']['items']
     photos_dict = {}
-    new_json = []
     for i in photos_json:
         likes = f"{i['likes']['count']}.jpg"
-        size_len = len(i['sizes']) - 1
-        size = i['sizes'][size_len]
-
-        photos_dict['file name'] = likes
-        photos_dict['size'] = size
-
-        if photos_dict['file name'] in photos_dict:
-            photos_dict['file name'] = f"{i['date']}.jpg"
+        size = i['sizes'][-1]
+        if likes in photos_dict:
+            photos_dict[f"{i['date']}.jpg"] = size
         else:
-            new_json.append(photos_dict)
+            photos_dict[likes] = size
 
-    return new_json
+
+    return photos_dict
 
 
 pprint(photos_list())
