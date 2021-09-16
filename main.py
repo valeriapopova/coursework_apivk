@@ -27,27 +27,35 @@ def photos_list():
     photos = []
     for values in getting_photos().values():
         for likes in values['items']:
-            if likes['likes']['count'] not in photos:
-                photos.append({
-                    'file_name': f"{likes['likes']['count']}.jpg",
-                    'size': likes['sizes'][-1]['type'],
-                    'size url': likes['sizes'][-1]['url']
-                 })
-            else:
-                photos.append({
-                    'file_name': f"{likes['date']}.jpg",
-                    'size': likes['sizes'][-1]['type'],
-                    'size url': likes['sizes'][-1]['url']
+            photos.append({
+                'file_name': f"{likes['likes']['count']}.jpg",
+                'size': likes['sizes'][-1]['type'],
+                'size url': likes['sizes'][-1]['url']
+            })
+            for el in photos:
+                if el['file_name'] in photos:
+                    photos.append({
+                        'file_name': f"{likes['date']}.jpg",
+                        'size': likes['sizes'][-1]['type'],
+                        'size url': likes['sizes'][-1]['url']
                     })
-    return photos
+
+                # else:
+                #     photos.append({
+                #         'file_name': f"{likes['likes']['count']}.jpg",
+                #         'size': likes['sizes'][-1]['type'],
+                #         'size url': likes['sizes'][-1]['url']
+                #     })
+        return photos
 
 
 pprint(photos_list())
 
+
 if __name__ == '__main__':
 
-    vk = photos_list['file_name']
-    vk_path = photos_list['size url']
+    vk = [el['file_name'] for el in photos_list()]
+    vk_path = [el['size_url'] for el in photos_list()]
     ya_token = ''
     uploader = YD(ya_token)
     result = uploader.upload_file_to_disk(vk_path, vk)
