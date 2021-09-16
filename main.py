@@ -1,4 +1,7 @@
 import requests
+import time
+from tqdm import tqdm
+import json
 from ya import YD
 from pprint import pprint
 
@@ -20,25 +23,51 @@ def getting_photos():
     return res.json()
 
 
+
 pprint(getting_photos())
 
 
 def photos_list():
-    photos = []
-    for values in getting_photos().values():
-        for likes in values['items']:
-            photos.append({
-                'file_name': f"{likes['likes']['count']}.jpg",
-                'size': likes['sizes'][-1]['type'],
-                'size url': likes['sizes'][-1]['url']
-            })
-            for el in photos:
-                if el['file_name'] in photos:
-                    photos.append({
-                        'file_name': f"{likes['date']}.jpg",
-                        'size': likes['sizes'][-1]['type'],
-                        'size url': likes['sizes'][-1]['url']
-                    })
+    photos_json = getting_photos()['response']['items']
+    photos_dict = {}
+    new_json = []
+    for i in photos_json:
+        likes = f"{i['likes']['count']}.jpg"
+        size_len = len(i['sizes']) - 1
+        size = i['sizes'][size_len]
+
+        photos_dict['file name'] = likes
+        photos_dict['size'] = size
+
+        if photos_dict['file name'] in photos_dict:
+            photos_dict['file name'] = f"{i['date']}.jpg"
+        else:
+            new_json.append(photos_dict)
+
+    return new_json
+
+
+pprint(photos_list())
+
+
+
+
+
+
+    # for values in getting_photos().values():
+#         for likes in values['items']:
+#             photos.append({
+#                 'file_name': f"{likes['likes']['count']}.jpg",
+#                 'size': likes['sizes'][-1]['type'],
+#                 'size url': likes['sizes'][-1]['url']
+#             })
+#             for el in photos:
+#                 if el['file_name'] in photos:
+#                     photos.append({
+#                         'file_name': f"{likes['date']}.jpg",
+#                         'size': likes['sizes'][-1]['type'],
+#                         'size url': likes['sizes'][-1]['url']
+#                     })
 
                 # else:
                 #     photos.append({
@@ -46,17 +75,17 @@ def photos_list():
                 #         'size': likes['sizes'][-1]['type'],
                 #         'size url': likes['sizes'][-1]['url']
                 #     })
-        return photos
-
-
-pprint(photos_list())
-
-
-if __name__ == '__main__':
-
-    vk = [el['file_name'] for el in photos_list()]
-    vk_path = [el['size_url'] for el in photos_list()]
-    ya_token = ''
-    uploader = YD(ya_token)
-    result = uploader.upload_file_to_disk(vk_path, vk)
-    pprint(result)
+#         return photos
+#
+#
+# pprint(photos_list())
+#
+#
+# if __name__ == '__main__':
+#
+#     vk = [el['file_name'] for el in photos_list()]
+#     vk_path = [el['size_url'] for el in photos_list()]
+#     ya_token = ''
+#     uploader = YD(ya_token)
+#     result = uploader.upload_file_to_disk(vk_path, vk)
+#     pprint(result)
