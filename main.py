@@ -1,8 +1,12 @@
 import requests
-import time
-from tqdm import tqdm
+from datetime import datetime
 from ya import YD
 from pprint import pprint
+from time import sleep
+from tqdm import tqdm
+for i in tqdm(range(100), desc='Photos', unit=' photos'):
+    sleep(.1)
+
 
 version = '5.131'
 URL = 'https://api.vk.com/method/photos.get'
@@ -23,7 +27,7 @@ def getting_photos():
     return res.json()
 
 
-pprint(getting_photos())
+# pprint(getting_photos())
 
 
 def photos_list():
@@ -33,20 +37,20 @@ def photos_list():
         likes = f"{i['likes']['count']}.jpg"
         size = i['sizes'][-1]['url']
         if likes in photos_dict:
-            photos_dict[f"{i['date']}.jpg"] = size
+            d = datetime.fromtimestamp(i['date']).strftime('%m-%d-%y %H-%M-%S')
+            photos_dict[f"{d}.jpg"] = size
         else:
             photos_dict[likes] = size
 
     return photos_dict
 
 
-pprint(photos_list())
+# pprint(photos_list())
 
 
 if __name__ == '__main__':
-    vk = photos_list().keys()
-    vk_path = photos_list().values()
     ya_token = ''
     uploader = YD(ya_token)
-    result = uploader.upload_(vk_path, vk )
-    pprint(result)
+    for item, file in photos_list().items():
+        result = uploader.upload_(file, item)
+        pprint(result)

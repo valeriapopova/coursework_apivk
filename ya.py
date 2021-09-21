@@ -1,5 +1,6 @@
 import requests
-from pprint import pprint
+path = 'vk_photos/'
+
 
 
 class YD:
@@ -16,7 +17,7 @@ class YD:
     def upload_(self, file_path, file_name):
         upload_url = "https://cloud-api.yandex.net/v1/disk/resources/upload"
         headers = self.get_headers()
-        params = {"path": file_name, "url": file_path, "overwrite": "true"}
+        params = {"path": f'{path}{file_name}', "url": file_path, "overwrite": "true"}
         response = requests.post(upload_url, headers=headers, params=params)
         res = response.json()
-        pprint(res)
+        return res
