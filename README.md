@@ -2,7 +2,7 @@
 
 *В файле main.py пользователь вводит:*
 
-[id пользователя и токен vk](https://vk.com/dev/implicit_flow_user)
+[id пользователя/username и токен vk](https://vk.com/dev/implicit_flow_user)
 
 [токен с Полигона Яндекс.Диска](https://yandex.ru/dev/disk/poligon/) 
 
